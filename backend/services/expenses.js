@@ -1,14 +1,18 @@
 const path = require("path");
 const { parse, serialize } = require("../utils/json");
 const jsonDbPath = path.join(__dirname, "/../data/expenses.json");
+const { PrismaClient } = require("./generated/prisma");
+const prisma = new PrismaClient();
 
-function getAllExpenses() {
-  return parse(jsonDbPath);
+async function getAllExpenses() {
+  const expenses = await prisma.expense.findMany();
+  return expenses;
 }
 
-function addExpense(expense) {
-  const expenses = getAllExpenses();
-  serialize(jsonDbPath, [...expenses, expense]);
+async function addExpense(expense) {
+  await prisma.expense.create({
+    data: expense
+  });
 }
 
 function resetExpenses() {
