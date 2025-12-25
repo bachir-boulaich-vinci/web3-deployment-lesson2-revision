@@ -46,7 +46,7 @@ export function Home() {
         method: "POST"
       };
 
-      const response = await fetch("http://localhost:3000/api/expenses/reset", options);
+      const response = await fetch(`${host}/api/expenses/reset`, options);
 
       if (!response.ok) {
         throw new Error(`fetch error: ${response.status} : ${response.statusText}`);

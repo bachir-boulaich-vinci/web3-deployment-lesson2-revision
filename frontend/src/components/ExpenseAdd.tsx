@@ -6,6 +6,7 @@ interface ExpenseAddProps {
 
 export function ExpenseAdd({ handleAdd }: ExpenseAddProps) {
   const onAdd = async () => {
+      const host = import.meta.env.VITE_API_URL || 'http://unknown-api-url.com';
     try {
       const today = new Date();
       const newExpense: Expense = {
@@ -31,7 +32,7 @@ export function ExpenseAdd({ handleAdd }: ExpenseAddProps) {
       };
 
       const response = await fetch(
-        "http://localhost:3000/api/expenses",
+        `${host}/api/expenses`,
         options
       );
 
