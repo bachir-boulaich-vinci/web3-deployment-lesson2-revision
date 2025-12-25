@@ -7,7 +7,7 @@ import ExpenseSorter from "../components/ExpenseSorter";
 export function Home() {
   const host = import.meta.env.VITE_API_URL || 'http://unknown-api-url.com';
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [sortingAlgo, setSortingAlgo] = useState<(a: Expense, b: Expense) => number>(() => (a: Expense, b: Expense) => 0);
+  const [sortingAlgo, setSortingAlgo] = useState<(a: Expense, b: Expense) => number>(() => () => 0);
 
   useEffect(() => {
     fetchExpenses();
