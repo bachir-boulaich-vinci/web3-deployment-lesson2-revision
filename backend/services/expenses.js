@@ -1,7 +1,7 @@
 const path = require("path");
 const { parse, serialize } = require("../utils/json");
 const jsonDbPath = path.join(__dirname, "/../data/expenses.json");
-const { PrismaClient } = require("./generated/prisma");
+const { PrismaClient } = require("../generated/prisma");
 const prisma = new PrismaClient();
 
 async function getAllExpenses() {
