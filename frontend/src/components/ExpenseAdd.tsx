@@ -8,7 +8,6 @@ export function ExpenseAdd({ handleAdd }: ExpenseAddProps) {
   const onAdd = async () => {
       const host = import.meta.env.VITE_API_URL || 'http://unknown-api-url.com';
     try {
-      const today = new Date();
       const newExpense: Expense = {
         date: new Date().toISOString(),
         description:
