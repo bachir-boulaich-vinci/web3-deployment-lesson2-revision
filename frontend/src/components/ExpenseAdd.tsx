@@ -10,12 +10,7 @@ export function ExpenseAdd({ handleAdd }: ExpenseAddProps) {
     try {
       const today = new Date();
       const newExpense: Expense = {
-        date:
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate(),
+        date: new Date().toISOString(),
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, atque, blanditiis quas quos numquam perspiciatis cupiditate fugit vel veritatis voluptas facilis! Amet sed repudiandae aspernatur reprehenderit, tempore expedita quisquam molestias.",
         payer: ["Alice", "Bob"][Math.floor(Math.random() * 2)],
