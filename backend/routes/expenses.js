@@ -1,5 +1,9 @@
 var express = require("express");
-const { addExpense, getAllExpenses, resetExpenses } = require("../services/expenses");
+const {
+  addExpense,
+  getAllExpenses,
+  resetExpenses,
+} = require("../services/expenses");
 var router = express.Router();
 
 router.get("/expenses", async function (_req, res, _next) {
@@ -7,6 +11,8 @@ router.get("/expenses", async function (_req, res, _next) {
 });
 
 router.post("/expenses", async function (req, res, _next) {
+  console.log("BODY:", req.body);
+  console.log("DATE:", req.body?.date);
   const newExpense = {
     date: new Date(req.body.date),
     description: req.body.description,
@@ -18,8 +24,8 @@ router.post("/expenses", async function (req, res, _next) {
   return res.json(createdExpense);
 });
 
-router.post('/expenses/reset', function(req, res, _next) {
-    return res.json(resetExpenses());
+router.post("/expenses/reset", function (req, res, _next) {
+  return res.json(resetExpenses());
 });
 
 module.exports = router;
