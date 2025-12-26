@@ -10,7 +10,7 @@ async function getAllExpenses() {
 }
 
 async function addExpense(expense) {
-  await prisma.expense.create({
+  return await prisma.expense.create({
     data: expense
   });
 }

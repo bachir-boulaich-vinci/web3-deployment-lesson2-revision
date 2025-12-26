@@ -10,7 +10,6 @@ export function ExpenseAdd({ handleAdd }: ExpenseAddProps) {
     try {
       const today = new Date();
       const newExpense: Expense = {
-        id: Date.now().toString(),
         date:
           today.getFullYear() +
           "-" +

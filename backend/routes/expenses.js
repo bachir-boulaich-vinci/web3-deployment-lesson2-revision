@@ -8,7 +8,6 @@ router.get("/expenses", async function (_req, res, _next) {
 
 router.post("/expenses", async function (req, res, _next) {
   const newExpense = {
-    id: parseInt(Date.now().toString()),
     date: new Date(req.body.date),
     description: req.body.description,
     payer: req.body.payer,
