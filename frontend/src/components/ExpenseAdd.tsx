@@ -1,3 +1,9 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  expenseSchema,
+  type ExpenseFormData,
+} from "../schemas/ExpenseAdd.schema";
 import type { Expense } from "../types/Expense";
 
 interface ExpenseAddProps {
@@ -5,43 +11,64 @@ interface ExpenseAddProps {
 }
 
 export function ExpenseAdd({ handleAdd }: ExpenseAddProps) {
-  const onAdd = async () => {
-      const host = import.meta.env.VITE_API_URL || 'http://unknown-api-url.com';
-    try {
-      const newExpense: Expense = {
-        date: new Date().toISOString(),
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, atque, blanditiis quas quos numquam perspiciatis cupiditate fugit vel veritatis voluptas facilis! Amet sed repudiandae aspernatur reprehenderit, tempore expedita quisquam molestias.",
-        payer: ["Alice", "Bob"][Math.floor(Math.random() * 2)],
-        amount: Number((Math.random() * 101).toFixed(2)),
-      };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<ExpenseFormData>({
+    resolver: zodResolver(expenseSchema),
+  });
 
-      const options = {
-        method: "POST",
-        body: JSON.stringify(newExpense),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+  const onSubmit = async (data: ExpenseFormData) => {
+    const host = import.meta.env.VITE_API_URL;
 
-      const response = await fetch(
-        `${host}/api/expenses`,
-        options
-      );
+    const response = await fetch(`${host}/api/expenses`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
-      if (!response.ok) {
-        throw new Error(
-          `fetch error : ${response.status} : ${response.statusText}`
-        );
-      }
-
-      const createdExpense = await response.json();
-
-      handleAdd(createdExpense);
-    } catch (err) {
-      console.error("Post expense error : ", err);
-    }
+    const createdExpense: Expense = await response.json();
+    handleAdd(createdExpense);
+    reset();
   };
 
-  return <button onClick={onAdd}>Add</button>;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label>
+        Payer:
+        <select {...register("payer")}>
+          <option value="">Select payer</option>
+          <option value="Alice">Alice</option>
+          <option value="Bob">Bob</option>
+        </select>
+        {errors.payer && <span>{errors.payer.message}</span>}
+      </label>
+
+      <label>
+        Date:
+        <input type="date" {...register("date")} />
+        {errors.date && <span>{errors.date.message}</span>}
+      </label>
+
+      <label>
+        Amount:
+        <input
+          type="number"
+          step="0.01"
+          {...register("amount", { valueAsNumber: true })}
+        />
+        {errors.amount && <span>{errors.amount.message}</span>}
+      </label>
+
+      <label>
+        Description:
+        <textarea {...register("description")} />
+        {errors.description && <span>{errors.description.message}</span>}
+      </label>
+
+      <button type="submit">Add expense</button>
+    </form>
+  );
 }
